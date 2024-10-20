@@ -1,27 +1,11 @@
 #!/bin/bash
-cat  >> /etc/systemd/system/tun2socks <<EOF
-[Unit]
-Description=Tun2Socks
-After=network.target
-
-[Service]
-Type=simple
-User=root
-EnvironmentFile=/etc/tun2socks/tun2socks.conf
-ExecStartPre=-ip tuntap add mode tun dev tun0
-ExecStartPre=ip addr add ${TUNIP}/${TUNPREFIX} dev tun0
-ExecStartPre=ip link set dev tun0 up
-ExecStart=tun2socks -device tun://tun0 -proxy ss://${SSPROTOCOL}:${SSPASSWORD}@${SSIP}:${SSPORT}
-ExecStartPost=ip r add default dev tun0 metric 50
-ExecStopPost=-ip r flush table lip
-ExecStopPost=-ip rule delete table lip
-ExecStopPost=-ip link set dev tun0 down
-ExecStopPost=-ip link del dev tun0
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
+apt update
+apt install shadowsocks-libev -y
+apt-get install unzip -y
+wget https://github.com/xjasonlyu/tun2socks/releases/download/v2.5.2/tun2socks-linux-amd64.zip
+unzip tun2socks-linux-amd64.zip -d .
+mv tun2socks-linux-amd64 /usr/bin/tun2socks
+cp tun2socks.service /etc/systemd/system/tun2socks.service
 mkdir /etc/tun2socks
 cat  >> /etc/tun2socks/tun2socks.conf <<EOF
 TUNIP=10.10.0.1
