@@ -1,0 +1,16 @@
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPAdvertisement
+metadata:
+  name: bgp-advertise-lb
+  labels:
+    advertise: bgp-advertise-lb
+spec:
+  advertisements:
+    - advertisementType: "Service"
+      service:
+        addresses:
+          - LoadBalancerIP
+      selector:
+        matchLabels:
+          pool: {{ .Values.config.open5gsLbPool }}
