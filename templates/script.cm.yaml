@@ -8,5 +8,5 @@ data:
     #!/usr/bin/env bash
     ssh -w 0:0 -f {{ .Values.connect.remoteHost }} -p 22 "ip addr add {{ .Values.connect.remoteHost}}/{{ .Values.connect.remoteMask}} dev tun0 && ip link set tun0 up && true"
     sleep 3
-    LOCIP=$(ifconfig eth0 | grep 'inet' | awk '{print $2}' | cut -d '.' -f 4 | sed '1q')
+    LOCIP=$(ifconfig {{ .Values.connect.localDev }} | grep 'inet' | awk '{print $2}' | cut -d '.' -f 4 | sed '1q')
     ip addr add {{ .Values.connect.localIp }}$LOCIP/{{ .Values.connect.localMask }} dev tun0 && ip link set tun0 up
