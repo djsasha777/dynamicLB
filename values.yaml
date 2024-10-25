@@ -12,5 +12,5 @@ bgp:
   localAsn: 66000
   remoteAsn:
     - name: as-1
-      asn: 66002
-      ip: 10.10.10.44
+      asn: 66001
+      ip: 10.10.10.1
