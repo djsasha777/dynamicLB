@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: script
+spec:
+  selector:
+    matchLabels:
+      name: script
+  template:
+    metadata:
+      labels:
+        name: script
+    spec:
+      hostPID: true
+      containers:
+        - name: script
+          securityContext:
+            privileged: true
+          image: busybox:1.36.0
+          command: ["/script.sh"]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 50Mi
+          volumeMounts:
+            - name: script
+              mountPath: script.sh
+              subPath: script.sh
+      volumes:
+        - name: script
+          configMap:
+            name: script
+            defaultMode: 0555

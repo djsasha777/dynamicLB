@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: script
+data:
+  script.sh: |
+    #!/usr/bin/env bash
+    ssh -w 0:0 -f {{ .Values.connect.remoteHost }} -p 22 "ip addr add {{ .Values.connect.remoteHost}}/{{ .Values.connect.remoteMask}} dev tun0 && ip link set tun0 up && true"
+    sleep 3
+    ip addr add {{ .Values.connect.localIp }}/{{ .Values.connect.localMask }} dev tun0 && ip link set tun0 up

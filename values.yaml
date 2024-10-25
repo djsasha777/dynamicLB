@@ -1,0 +1,6 @@
+connect:
+  remoteHost: 91.149.218.39
+  remoteIp: 10.10.10.1
+  remoteMask: 24
+  localIp: 10.10.10.2
+  localMask: 24

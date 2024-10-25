@@ -5,7 +5,7 @@ TUN_LOCAL=0
 TUN_REMOTE=0
 IP_LOCAL=10.10.10.2
 IP_REMOTE=10.10.10.1
-IP_MASK=30
+IP_MASK=24
 echo "Starting VPN tunnel ..." 
 modprobe tun
 ssh -w ${TUN_LOCAL}:${TUN_REMOTE} -f ${HOST} -p ${HOST_PORT} "\
