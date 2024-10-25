@@ -8,8 +8,10 @@ spec:
   - name: "external"
     localASN: 66000
     peers:
-    - name: "peer-66006"
-      peerASN: 66006
-      peerAddress: 10.10.10.1
+{{- range $peers := .Values.bgp.remoteAsn }}
+    - name: "{{ $peers.name }}"
+      peerASN: {{ $peers.asn }}
+      peerAddress: {{ $peers.ip }}
       peerConfigRef:
         name: "cilium-peer"
+{{- end }}

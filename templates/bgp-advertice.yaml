@@ -13,4 +13,4 @@ spec:
           - LoadBalancerIP
       selector:
         matchLabels:
-          pool: {{ .Values.config.open5gsLbPool }}
+          pool: pool-lb
