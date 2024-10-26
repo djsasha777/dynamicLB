@@ -26,6 +26,12 @@ spec:
             - name: script
               mountPath: script.sh
               subPath: script.sh
+          env:
+          - name: SSHPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ssh-secret
+                key: SSHPASSWORD
       volumes:
         - name: script
           configMap:

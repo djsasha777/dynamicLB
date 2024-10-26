@@ -6,22 +6,51 @@ metadata:
 data:
   script.sh: |
     #!/usr/bin/env bash
+    #LOCAL INIT
+    if [[ -n "$LOCALINIT" ]] && [[ "$LOCALINIT" == "yes" ]]; then
+      echo "LOCAL Уже инициализировано"
+    else
     sysctl -w net.ipv4.ip_forward=1
     if ! grep -q '^PermitTunnel yes$' /etc/ssh/sshd_config; then
       echo "PermitTunnel yes" | sudo tee -a /etc/ssh/sshd_config > /dev/null
-      echo "ADDED 'PermitTunnel yes' TO /etc/ssh/sshd_config."
-    else
-      echo "THE 'PermitTunnel yes' IS IN FILE /etc/ssh/sshd_config."
+      systemctl restart sshd
+      sleep 5
+      LOCALINIT=yes
     fi
-    ssh -w 0:0 -f {{ .Values.connect.remoteHost }} -p 22 "ip addr add {{ .Values.connect.remoteHost}}/{{ .Values.connect.remoteMask}} \
-    dev tun0 && sysctl -w net.ipv4.ip_forward=1 && \
-    if ! grep -q '^PermitTunnel yes$' /etc/ssh/sshd_config; then \
-      echo "PermitTunnel yes" | sudo tee -a /etc/ssh/sshd_config > /dev/null \
-      echo "ADDED 'PermitTunnel yes' TO /etc/ssh/sshd_config." \
+    fi
+    #REMOTE INIT
+    if [[ -n "$REMOTEINIT" ]] && [[ "$REMOTEINIT" == "yes" ]]; then
+      echo "REMOTE Уже инициализировано"
+    else
+    if [ ! -f ~/.ssh/id_rsa ]; then
+      echo "Генерация нового SSH-ключа..."
+      ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
+    fi
+    spawn ssh-copy-id root@{{ .Values.connect.remoteHost }}
+    expect \"password:\"
+    send \"$SSHPASSWORD\r\"
+    interact
+    ssh root@{{ .Values.connect.remoteHost }} "\
+    sysctl -w net.ipv4.ip_forward=1 && \
+    if ! grep -q '^PermitTunnel yes$' /etc/ssh/sshd_config; then
+      echo "PermitTunnel yes" | sudo tee -a /etc/ssh/sshd_config > /dev/null
+      systemctl restart sshd
+      sleep 5
+      REMOTEINIT=yes
+    fi
+    fi
+    #TUNNEL
+    ssh -w 0:0 -f {{ .Values.connect.remoteHost }} -p 22 \
+    "if ip link show | grep -q 'tun0'; then \
+      echo "Интерфейс tun0 уже существует." \
     else \
-      echo "THE 'PermitTunnel yes' IS IN FILE /etc/ssh/sshd_config." \
-    fi && \
-    ip link set tun0 up && true"
+      ip addr add {{ .Values.connect.remoteHost}}/{{ .Values.connect.remoteMask}} dev tun0 && ip link set tun0 up && true \
+    fi"
     sleep 5
     LOCIP=$(ifconfig {{ .Values.connect.localDev }} | grep 'inet' | awk '{print $2}' | cut -d '.' -f 4 | sed '1q')
-    ip addr add {{ .Values.connect.localIp }}$LOCIP/{{ .Values.connect.localMask }} dev tun0 && ip link set tun0 up
+    if ip link show | grep -q 'tun0'; then
+      echo "Интерфейс tun0 уже существует."
+    else
+      ip addr add {{ .Values.connect.localIp }}$LOCIP/{{ .Values.connect.localMask }} dev tun0 && ip link set tun0 up
+    fi
+    
