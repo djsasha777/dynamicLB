@@ -1,6 +1,7 @@
 connect:
   localDev: ens18
   remoteHost: 91.149.218.39
+  remoteSshPass: 1234567890
   remoteIp: 10.10.10.1
   remoteMask: 24
   localIp: 10.10.10.
