@@ -6,7 +6,7 @@ metadata:
 spec:
   bgpInstances:
   - name: "external"
-    localASN: 66000
+    localASN: {{ .Values.bgp.localAsn }}
     peers:
 {{- range $peers := .Values.bgp.remoteAsn }}
     - name: "{{ $peers.name }}"
