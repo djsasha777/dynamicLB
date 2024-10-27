@@ -1,4 +1,4 @@
-name: ci
+name: node-installer
 on:
   push:
     branches: [ "main" ]
