@@ -6,39 +6,40 @@ data:
   install.sh: |
     #!/usr/bin/env bash
     #LOCAL INIT
-    if [ ! -f "~/LOCALINIT" ]; then
-      echo "LOCAL INIT START"
-      sysctl -w net.ipv4.ip_forward=1
-      apt update && apt install expect bird -y
-      if ! grep -q '^PermitTunnel yes$' /etc/ssh/sshd_config; then
-        echo "PermitTunnel yes" | sudo tee -a /etc/ssh/sshd_config > /dev/null
-        service ssh restart
-        sleep 5
-        touch ~/LOCALINIT
-      fi
+    #LOCAL INIT
+    if [ ! -f "LOCALINIT" ]; then
+    echo "LOCAL INIT START"
+    sysctl -w net.ipv4.ip_forward=1
+    apt update && apt install expect bird -y
+    if ! grep -q '^PermitTunnel yes$' /etc/ssh/sshd_config; then
+    echo 'PermitTunnel yes' | sudo tee -a /etc/ssh/sshd_config > /dev/null
+    service ssh restart
+    sleep 5
+    touch LOCALINIT
+    fi
     else
-      echo "LOCAL Уже инициализировано"
+    echo "LOCAL Уже инициализировано"
     fi
     #REMOTE INIT
-    if [ ! -f "~/REMOTEINIT" ]; then
-      echo "REMOTE INIT START"
-      if [ ! -f ~/.ssh/id_rsa ]; then
-        echo "Генерация нового SSH-ключа..."
-        ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
-      fi
-      spawn ssh-copy-id root@{{ .Values.connect.remoteHost }}
-      expect \"password:\"
-      send \"{{ .Values.connect.remoteSshPass }}\r\"
-      interact
-      ssh root@{{ .Values.connect.remoteHost }} "\
-      apt update && apt install haproxy bird -y && \
-      sysctl -w net.ipv4.ip_forward=1 && \
-      if ! grep -q '^PermitTunnel yes$' /etc/ssh/sshd_config; then
-        echo "PermitTunnel yes" | sudo tee -a /etc/ssh/sshd_config > /dev/null
-        systemctl restart sshd
-        sleep 5
-        touch ~/REMOTEINIT
-      fi      
+    if [ ! -f "REMOTEINIT" ]; then
+    echo "REMOTE INIT START"
+    if [ ! -f ~/.ssh/id_rsa ]; then
+    echo "Генерация нового SSH-ключа..."
+    ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
+    fi
+    spawn ssh-copy-id root@{{ .Values.connect.remoteHost }}
+    expect \"password:\"
+    send \"{{ .Values.connect.remoteSshPass }}\r\"
+    interact
+    ssh root@{{ .Values.connect.remoteHost }} "\
+    apt update && apt install haproxy bird -y && \
+    sysctl -w net.ipv4.ip_forward=1 && \
+    if ! grep -q '^PermitTunnel yes$' /etc/ssh/sshd_config; then
+    echo 'PermitTunnel yes' | sudo tee -a /etc/ssh/sshd_config > /dev/null
+    systemctl restart sshd
+    sleep 5
+    touch REMOTEINIT
+    fi"      
     else
     echo "REMOTE Уже инициализировано"
     fi
