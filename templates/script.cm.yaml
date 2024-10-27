@@ -10,6 +10,7 @@ data:
     echo "LOCAL INIT START"
     sysctl -w net.ipv4.ip_forward=1
     apt update && apt install expect bird -y --fix-missing
+    fuser /var/{lib/{dpkg,apt/lists},cache/apt/archives}/lock >/dev/null 2>&1; do sleep 1; done
     if ! grep -q '^PermitTunnel yes$' /etc/ssh/sshd_config; then
     echo 'PermitTunnel yes' | sudo tee -a /etc/ssh/sshd_config > /dev/null
     service ssh restart
@@ -32,6 +33,7 @@ data:
     interact"
     ssh root@{{ .Values.connect.remoteHost }} "\
     apt update && apt install haproxy bird -y --fix-missing && \
+    fuser /var/{lib/{dpkg,apt/lists},cache/apt/archives}/lock >/dev/null 2>&1; do sleep 1; done && \
     sysctl -w net.ipv4.ip_forward=1 && \
     if ! grep -q '^PermitTunnel yes$' /etc/ssh/sshd_config; then
     echo 'PermitTunnel yes' | sudo tee -a /etc/ssh/sshd_config > /dev/null
