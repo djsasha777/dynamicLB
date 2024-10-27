@@ -44,6 +44,8 @@ data:
     else
     echo "REMOTE Уже инициализировано"
     fi
+  tuninstall.sh: |
+    #!/usr/bin/env bash 
     #TUNNEL
     ssh -w 0:0 -f {{ .Values.connect.remoteHost }} -p 22 "if ip link show | grep -q 'tun0'; then \
       echo "Интерфейс tun0 уже существует." \
