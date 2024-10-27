@@ -11,7 +11,7 @@ data:
       echo "LOCAL Уже инициализировано"
     else
     sysctl -w net.ipv4.ip_forward=1
-    apt-get install expect -y
+    apt install expect bird birdc -y
     if ! grep -q '^PermitTunnel yes$' /etc/ssh/sshd_config; then
       echo "PermitTunnel yes" | sudo tee -a /etc/ssh/sshd_config > /dev/null
       systemctl restart sshd
@@ -32,7 +32,7 @@ data:
     send \"{{ .Values.connect.remoteSshPass }}\r\"
     interact
     ssh root@{{ .Values.connect.remoteHost }} "\
-    apt-get install haproxy -y && \
+    apt install haproxy bird birdc -y && \
     sysctl -w net.ipv4.ip_forward=1 && \
     if ! grep -q '^PermitTunnel yes$' /etc/ssh/sshd_config; then
       echo "PermitTunnel yes" | sudo tee -a /etc/ssh/sshd_config > /dev/null
