@@ -43,8 +43,7 @@ data:
     echo "REMOTE Уже инициализировано"
     fi
     #TUNNEL
-    ssh -w 0:0 -f {{ .Values.connect.remoteHost }} -p 22 \
-    "if ip link show | grep -q 'tun0'; then \
+    ssh -w 0:0 -f {{ .Values.connect.remoteHost }} -p 22 "if ip link show | grep -q 'tun0'; then \
       echo "Интерфейс tun0 уже существует." \
     else \
       ip addr add {{ .Values.connect.remoteHost}}/{{ .Values.connect.remoteMask}} dev tun0 && ip link set tun0 up && true \
