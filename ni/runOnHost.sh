@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Copy installation script to host
-cp /tmp/install.sh /host
+cp /tmp/* /host
 
 # Copy wait script to the host 
 cp /wait.sh /host
@@ -17,6 +17,7 @@ cp /wait.sh /host
 
 # If the /tmp folder is mounted on the host then it can run the script
 /usr/bin/nsenter -m/proc/1/ns/mnt /tmp/install/install.sh
-
+/usr/bin/nsenter -m/proc/1/ns/mnt /tmp/install/reminstall.sh
+/usr/bin/nsenter -m/proc/1/ns/mnt /tmp/install/tuninstall.sh
 # Sleep so that the Pod in the DaemonSet does not exit
 sleep infinity

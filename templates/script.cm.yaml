@@ -5,9 +5,8 @@ metadata:
 data:
   install.sh: |
     #!/usr/bin/env bash
-    echo "LOCAL initialisation..."
     if [ ! -f "LOCALINIT" ]; then
-    echo "installing..."
+    echo "LOCAL initialisation..."
     sysctl -w net.ipv4.ip_forward=1
     if ! grep -q '^PermitTunnel yes$' /etc/ssh/sshd_config; then
     echo 'PermitTunnel yes' | sudo tee -a /etc/ssh/sshd_config > /dev/null
@@ -16,47 +15,44 @@ data:
     apt update && apt install -y --fix-missing expect bird && touch LOCALINIT
     fi
     else
-    echo "LOCAL is already inited"
+    echo "LOCAL is already initialized"
     fi
   reminstall.sh: |
     #!/usr/bin/env bash   
-    #REMOTE INIT
     if [ ! -f "REMOTEINIT" ]; then
     echo "REMOTE INIT START"
     if [ ! -f ~/.ssh/id_rsa ]; then
-    echo "Генерация нового SSH-ключа..."
+    echo "SSH key generation..."
     ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
     fi
     expect -c "spawn ssh-copy-id root@{{ .Values.connect.remoteHost }}
     expect \"password:\"
     send \"{{ .Values.connect.remoteSshPass }}\r\"
     interact"
-    ssh root@{{ .Values.connect.remoteHost }} "\
-    apt update && apt install -y --fix-missing haproxy bird && echo "software was installed" && \
-    /usr/bin/nsenter -m/proc/1/ns/mnt /tmp/install/wait.sh && \
-    sysctl -w net.ipv4.ip_forward=1 && \
+    ssh root@{{ .Values.connect.remoteHost }} "apt update
+    apt install -y --fix-missing haproxy bird 
+    sysctl -w net.ipv4.ip_forward=1
     if ! grep -q '^PermitTunnel yes$' /etc/ssh/sshd_config; then
     echo 'PermitTunnel yes' | sudo tee -a /etc/ssh/sshd_config > /dev/null
     systemctl restart sshd
     sleep 5
-    touch REMOTEINIT
-    fi"      
+    fi"
+    touch REMOTEINIT    
     else
-    echo "REMOTE Уже инициализировано"
+    echo "REMOTE is already initialized"
     fi
   tuninstall.sh: |
     #!/usr/bin/env bash 
-    #TUNNEL
-    ssh -w 0:0 -f {{ .Values.connect.remoteHost }} -p 22 "if ip link show | grep -q 'tun0'; then \
-      echo "Интерфейс tun0 уже существует." \
-    else \
-      ip addr add {{ .Values.connect.remoteHost}}/{{ .Values.connect.remoteMask}} dev tun0 && ip link set tun0 up && true \
+    ssh -w 0:0 -f {{ .Values.connect.remoteHost }} -p 22 "if ip link show | grep -q 'tun0'; then
+    echo 'interface tun is present'
+    else
+    ip addr add {{ .Values.connect.remoteHost}}/{{ .Values.connect.remoteMask}} dev tun0 && ip link set tun0 up && true
     fi"
     sleep 5
     LOCIP=$(ifconfig {{ .Values.connect.localDev }} | grep 'inet' | awk '{print $2}' | cut -d '.' -f 4 | sed '1q')
     if ip link show | grep -q 'tun0'; then
-      echo "Интерфейс tun0 уже существует."
+    echo 'interface is present'
     else
-      ip addr add {{ .Values.connect.localIp }}$LOCIP/{{ .Values.connect.localMask }} dev tun0 && ip link set tun0 up
+    ip addr add "{{ .Values.connect.localIp }}$LOCIP/{{ .Values.connect.localMask }}" dev tun0 && ip link set tun0 up
     fi
     
