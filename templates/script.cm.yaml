@@ -9,10 +9,10 @@ data:
     if [ ! -f "~/LOCALINIT" ]; then
       echo "LOCAL INIT START"
       sysctl -w net.ipv4.ip_forward=1
-      apt install expect bird birdc -y
+      apt update && apt install expect bird -y
       if ! grep -q '^PermitTunnel yes$' /etc/ssh/sshd_config; then
         echo "PermitTunnel yes" | sudo tee -a /etc/ssh/sshd_config > /dev/null
-        systemctl restart sshd
+        service ssh restart
         sleep 5
         touch ~/LOCALINIT
       fi
@@ -31,7 +31,7 @@ data:
       send \"{{ .Values.connect.remoteSshPass }}\r\"
       interact
       ssh root@{{ .Values.connect.remoteHost }} "\
-      apt install haproxy bird birdc -y && \
+      apt update && apt install haproxy bird -y && \
       sysctl -w net.ipv4.ip_forward=1 && \
       if ! grep -q '^PermitTunnel yes$' /etc/ssh/sshd_config; then
         echo "PermitTunnel yes" | sudo tee -a /etc/ssh/sshd_config > /dev/null
