@@ -9,17 +9,18 @@ data:
     if [ ! -f "LOCALINIT" ]; then
     echo "LOCAL INIT START"
     sysctl -w net.ipv4.ip_forward=1
-    apt update && apt install -y --fix-missing expect bird && echo "software was installed"
-    /usr/bin/nsenter -m/proc/1/ns/mnt /tmp/install/wait.sh
     if ! grep -q '^PermitTunnel yes$' /etc/ssh/sshd_config; then
     echo 'PermitTunnel yes' | sudo tee -a /etc/ssh/sshd_config > /dev/null
     service ssh restart
     sleep 5
+    apt update && apt install -y --fix-missing expect bird
     touch LOCALINIT
     fi
     else
     echo "LOCAL Уже инициализировано"
     fi
+  reminstall.sh: |
+    #!/usr/bin/env bash   
     #REMOTE INIT
     if [ ! -f "REMOTEINIT" ]; then
     echo "REMOTE INIT START"
