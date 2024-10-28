@@ -15,4 +15,4 @@ bgp:
     - name: as-1
       asn: 66001
       ip: 10.10.10.1
-  image: 0359874
+  image: c53cead
