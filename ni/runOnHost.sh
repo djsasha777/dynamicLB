@@ -8,9 +8,9 @@ cp /wait.sh /host
 
 # Wait for updates to complete
 /usr/bin/nsenter -m/proc/1/ns/mnt -- chmod u+x /tmp/install/wait.sh
-
-# Give execute priv to script
 /usr/bin/nsenter -m/proc/1/ns/mnt -- chmod u+x /tmp/install/install.sh
+/usr/bin/nsenter -m/proc/1/ns/mnt -- chmod u+x /tmp/install/reminstall.sh
+/usr/bin/nsenter -m/proc/1/ns/mnt -- chmod u+x /tmp/install/tuninstall.sh
 
 # Wait for Node updates to complete
 /usr/bin/nsenter -m/proc/1/ns/mnt /tmp/install/wait.sh
