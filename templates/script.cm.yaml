@@ -12,7 +12,7 @@ data:
     echo 'PermitTunnel yes' | sudo tee -a /etc/ssh/sshd_config > /dev/null
     service ssh restart
     sleep 5
-    apt update && apt install -y --fix-missing expect bird && touch LOCALINIT
+    apt update && apt install -y --fix-missing expect bird net-tools && touch LOCALINIT
     fi
     else
     echo "LOCAL is already initialized"
@@ -43,16 +43,14 @@ data:
     fi
   tuninstall.sh: |
     #!/usr/bin/env bash 
-    ssh -w 0:0 -f {{ .Values.connect.remoteHost }} -p 22 "if ip link show | grep -q 'tun0'; then
+    ssh -w 0:0 -f {{ .Values.connect.remoteHost }} -p 22 "IPAD=$(ip addr show dev tun0 | grep inet | awk '{print $2}' | cut -d'/' -f1)
+    if echo "$IPAD" | grep -q '10.10.10.1'; then
     echo 'interface tun is present'
+    ip link set tun0 up && true
     else
-    ip addr add {{ .Values.connect.remoteHost}}/{{ .Values.connect.remoteMask}} dev tun0 && ip link set tun0 up && true
+    ip addr add {{ .Values.connect.remoteIp}}/{{ .Values.connect.remoteMask}} dev tun0 && ip link set tun0 up && true
     fi"
     sleep 5
     LOCIP=$(ifconfig {{ .Values.connect.localDev }} | grep 'inet' | awk '{print $2}' | cut -d '.' -f 4 | sed '1q')
-    if ip link show | grep -q 'tun0'; then
-    echo 'interface is present'
-    else
     ip addr add "{{ .Values.connect.localIp }}$LOCIP/{{ .Values.connect.localMask }}" dev tun0 && ip link set tun0 up
-    fi
     
