@@ -5,52 +5,6 @@ metadata:
 data:
   install.sh: |
     #!/usr/bin/env bash
-    if [ ! -f "LOCALINIT" ]; then
-    echo "LOCAL initialisation..."
-    sysctl -w net.ipv4.ip_forward=1
-    if ! grep -q '^PermitTunnel yes$' /etc/ssh/sshd_config; then
-    echo 'PermitTunnel yes' | sudo tee -a /etc/ssh/sshd_config > /dev/null
-    service ssh restart
-    sleep 5
-    apt update && apt install -y --fix-missing expect bird net-tools && touch LOCALINIT
-    fi
-    else
-    echo "LOCAL is already initialized"
-    fi
-  reminstall.sh: |
-    #!/usr/bin/env bash   
-    if [ ! -f "REMOTEINIT" ]; then
-    echo "REMOTE INIT START"
-    if [ ! -f ~/.ssh/id_rsa ]; then
-    echo "SSH key generation..."
-    ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
-    fi
-    expect -c "spawn ssh-copy-id root@{{ .Values.connect.remoteHost }}
-    expect \"password:\"
-    send \"{{ .Values.connect.remoteSshPass }}\r\"
-    interact"
-    ssh root@{{ .Values.connect.remoteHost }} "apt update
-    apt install -y --fix-missing haproxy bird 
-    sysctl -w net.ipv4.ip_forward=1
-    if ! grep -q '^PermitTunnel yes$' /etc/ssh/sshd_config; then
-    echo 'PermitTunnel yes' | sudo tee -a /etc/ssh/sshd_config > /dev/null
-    systemctl restart sshd
-    sleep 5
-    fi"
-    touch REMOTEINIT    
-    else
-    echo "REMOTE is already initialized"
-    fi
-  tuninstall.sh: |
-    #!/usr/bin/env bash 
-    ssh -w 0:0 -f {{ .Values.connect.remoteHost }} -p 22 "IPAD=$(ip addr show dev tun0 | grep inet | awk '{print $2}' | cut -d'/' -f1)
-    if echo "$IPAD" | grep -q '10.10.10.1'; then
-    echo 'interface tun is present'
-    ip link set tun0 up && true
-    else
-    ip addr add {{ .Values.connect.remoteIp}}/{{ .Values.connect.remoteMask}} dev tun0 && ip link set tun0 up && true
-    fi"
-    sleep 5
-    LOCIP=$(ifconfig {{ .Values.connect.localDev }} | grep 'inet' | awk '{print $2}' | cut -d '.' -f 4 | sed '1q')
-    ip addr add "{{ .Values.connect.localIp }}$LOCIP/{{ .Values.connect.localMask }}" dev tun0 && ip link set tun0 up
+    echo "test"
+
     

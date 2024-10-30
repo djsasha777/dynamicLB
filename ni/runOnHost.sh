@@ -9,17 +9,9 @@ cp /wait.sh /host
 # Wait for updates to complete
 /usr/bin/nsenter -m/proc/1/ns/mnt -- chmod u+x /tmp/install/wait.sh
 /usr/bin/nsenter -m/proc/1/ns/mnt -- chmod u+x /tmp/install/install.sh
-/usr/bin/nsenter -m/proc/1/ns/mnt -- chmod u+x /tmp/install/reminstall.sh
-/usr/bin/nsenter -m/proc/1/ns/mnt -- chmod u+x /tmp/install/tuninstall.sh
 
-# Wait for Node updates to complete
 /usr/bin/nsenter -m/proc/1/ns/mnt /tmp/install/wait.sh
-
-# If the /tmp folder is mounted on the host then it can run the script
 /usr/bin/nsenter -m/proc/1/ns/mnt /tmp/install/install.sh
-/usr/bin/nsenter -m/proc/1/ns/mnt /tmp/install/wait.sh
-/usr/bin/nsenter -m/proc/1/ns/mnt /tmp/install/reminstall.sh
-/usr/bin/nsenter -m/proc/1/ns/mnt /tmp/install/wait.sh
-/usr/bin/nsenter -m/proc/1/ns/mnt /tmp/install/tuninstall.sh
+
 # Sleep so that the Pod in the DaemonSet does not exit
 sleep infinity
