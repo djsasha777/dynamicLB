@@ -22,7 +22,6 @@ data:
     service ssh restart
     sleep 5
     touch LOCALINIT
-    fi
     else
     echo "LOCAL is already initialized"
     fi
