@@ -19,14 +19,14 @@ spec:
         securityContext:
           privileged: true
         volumeMounts:
-        - name: install-script
+        - name: script
           mountPath: /tmp
-        - name: host-mount
+        - name: host
           mountPath: /host
       volumes:
-      - name: install-script
+      - name: script
         configMap:
-          name: sample-installer-config
-      - name: host-mount
+          name: tun
+      - name: host
         hostPath:
           path: /tmp/install

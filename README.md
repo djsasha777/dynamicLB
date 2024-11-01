@@ -15,31 +15,6 @@ ssh -o "PermitLocalCommand=yes" \
 -o ConnectTimeout=10 "ifconfig tap5 up && ifconfig tap5 10.0.25.1 netmask 255.255.255.0"
 
 
-ssh -o "PermitLocalCommand=yes" \
--o "LocalCommand=ifconfig tap7 up && ifconfig tap7 10.0.25.8 netmask 255.255.255.0" \
--o Tunnel=ethernet \
--w 7:7 \
--t root@91.149.218.39 \ 
--o ConnectTimeout=10 "ifconfig tap7 up && ifconfig tap7 10.0.25.9 netmask 255.255.255.0"
-
-ssh -o "PermitLocalCommand=yes" \
--o "LocalCommand=ifconfig tap2 up && ifconfig tap2 10.0.25.34 netmask 255.255.255.0" \
--o Tunnel=ethernet \
--w 2:2 \
--t root@91.149.218.39 \
--o ConnectTimeout=10 "ifconfig tap2 up && ifconfig tap2 10.0.25.39 netmask 255.255.255.0"
-
-
-LOCIP=$(ifconfig {{ .Values.connect.localDev }} | grep 'inet' | awk '{print $2}' | cut -d '.' -f 4 | sed '1q')
-
-
-
-
-
-
-
-
-
     #!/usr/bin/env bash
     if [ ! -f "LOCALINIT" ]; then
     echo "LOCAL initialisation..."
@@ -53,8 +28,6 @@ LOCIP=$(ifconfig {{ .Values.connect.localDev }} | grep 'inet' | awk '{print $2}'
     else
     echo "LOCAL is already initialized"
     fi
-  reminstall.sh: |
-    #!/usr/bin/env bash   
     if [ ! -f "REMOTEINIT" ]; then
     echo "REMOTE INIT START"
     if [ ! -f ~/.ssh/id_rsa ]; then
@@ -77,4 +50,3 @@ LOCIP=$(ifconfig {{ .Values.connect.localDev }} | grep 'inet' | awk '{print $2}'
     else
     echo "REMOTE is already initialized"
     fi
-  tuninstall.sh: |

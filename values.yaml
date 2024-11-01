@@ -1,11 +1,8 @@
 connect:
   localDev: ens18
-  remDev: eth0
   remoteHost: 91.149.218.39
   remoteSshPass: 1234567890
-  remoteIp: 10.10.10.
-  localIp: 10.10.10.
-
+  net: 10.10.
 
 bgp:
   adressPool: 11.11.11.0
