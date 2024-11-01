@@ -1,9 +1,4 @@
 #!/bin/bash
-#########################################
-#FileName:    svpn.sh
-#Author:      oicu
-#Blog:        http://oicu.cc.blog.163.com/
-#########################################
 PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
 export PATH
 
