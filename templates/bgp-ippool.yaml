@@ -7,3 +7,6 @@ spec:
   blocks:
     - cidr: {{ .Values.bgp.adressPool }}/{{ .Values.bgp.adressPrefix }}
   disabled: false
+  serviceSelector:
+    matchLabels:
+      pool: bgp
