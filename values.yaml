@@ -1,4 +1,4 @@
-tun: false
+tun: true
 connect:
   localDev: ens18
   remoteHost: 91.149.218.39
