@@ -13,7 +13,7 @@ bgp:
     - name: as-1
       asn: 66001
       ip: 10.10.10.1
-  image: ebc016e
+  image: 3c9d22a
 
 l2: 
   pool: 192.168.2.0
