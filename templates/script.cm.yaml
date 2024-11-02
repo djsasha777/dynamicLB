@@ -47,7 +47,7 @@ data:
     #!/usr/bin/env bash
 {{- if .Values.tun }}
     LOCIP=$(ifconfig {{ .Values.connect.localDev }} | grep 'inet' | awk '{print $2}' | cut -d '.' -f 4 | sed '1q')
-    sed -i 's/NUM/$LOCIP/g' /tmp/install/install.sh
+    sed -i 's/NUM/'"$LOCIP"'/g' /tmp/install/install.sh
 {{- else }}
     echo "none"
 {{- end }}
