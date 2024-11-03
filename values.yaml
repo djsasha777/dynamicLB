@@ -4,7 +4,7 @@ tunnel:
   adressPool: 12.12.12.0
   adressPoolcr: 12.12.12.
   adressPrefix: 24
-  image: e0a5e96
+  image: 5b6ade3
   localDev: ens18
   remoteDev: eth0
   remoteHost: 91.149.218.39
