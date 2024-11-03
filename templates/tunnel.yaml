@@ -59,17 +59,6 @@ data:
 
     start()
     {
-    LOCIP="$(ifconfig {{ .Values.tunnel.localDev }} | grep 'inet' | awk '{print $2}' | cut -d '.' -f 4 | sed '1q')"
-
-    SERVER_SSH_PORT="22"
-    SERVER_SSH_IP="{{ .Values.tunnel.remoteHost }}"
-    CLIENT_ETHERNET="{{ .Values.tunnel.localDev }}"
-    SERVER_ETHERNET="{{ .Values.tunnel.remoteDev }}"
-    CLIENT_TUNNEL="tun$LOCIP"
-    SERVER_TUNNEL="tun$LOCIP"
-    CLIENT_TUN_IP="{{ .Values.tunnel.connectNet }}$LOCIP.$LOCIP"
-    SERVER_TUN_IP="{{ .Values.tunnel.connectNet }}$LOCIP.1"
-    CLIENT_NET="{{ .Values.tunnel.adressPool }}/{{ .Values.tunnel.adressPrefix }}"
     ssh -NTCf -o ServerAliveInterval=30 \
         -o ServerAliveCountMax=6 \
         -o ExitOnForwardFailure=yes \
