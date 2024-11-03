@@ -2,23 +2,23 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: installer
+  name: tunnel
 spec:
   selector:
     matchLabels:
-      job: installer
+      job: tunnel
   template:
     metadata:
       labels:
-        job: installer
+        job: tunnel
     spec:
       hostNetwork: true
       hostPID: true
       hostIPC: true
       restartPolicy: Always
       containers:
-      - image: djsasha777/node-installer:{{ .Values.tunnel.image }}
-        name: installer
+      - image: djsasha777/tunnel:{{ .Values.tunnel.image }}
+        name: tunnel
         securityContext:
           privileged: true
         volumeMounts:

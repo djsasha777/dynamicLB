@@ -1,4 +1,4 @@
-name: node-installer
+name: tunnel
 on:
   push:
     branches: [ "main" ]
