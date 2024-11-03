@@ -46,7 +46,8 @@ data:
     [ "$(whoami)" != 'root' ] && echo "Run it as root." && exit 1
 
     LOCIP="$(ifconfig {{ .Values.tunnel.localDev }} | grep 'inet' | awk '{print $2}' | cut -d '.' -f 4 | sed '1q')"
-
+    SLEEP 2
+    echo "locip is $LOCIP"
     SERVER_SSH_PORT="22"
     SERVER_SSH_IP="{{ .Values.tunnel.remoteHost }}"
     CLIENT_ETHERNET="{{ .Values.tunnel.localDev }}"
