@@ -5,7 +5,7 @@ tunnel:
   adressPoolcr: 12.12.12.
   adressPrefix: 24
   image: dbdc70c
-  localDev: ens18
+  localDev: eth0
   remoteDev: eth0
   remoteHost: 91.149.218.39
 
