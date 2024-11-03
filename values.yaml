@@ -2,6 +2,7 @@ tunnel:
   enable: true
   connectNet: 10.10.
   adressPool: 12.12.12.0
+  adressPoolcr: 12.12.12.
   adressPrefix: 24
   image: dbdc70c
   localDev: ens18
