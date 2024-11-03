@@ -46,7 +46,6 @@ data:
     export PATH
 
     [ "$(whoami)" != 'root' ] && echo "Run it as root." && exit 1
-    ifconfig
     LOCIP="$(ifconfig {{ .Values.tunnel.localDev }} | grep 'inet' | awk '{print $2}' | cut -d '.' -f 4 | sed '1q')"
     echo "locip is $LOCIP"
     SERVER_SSH_PORT="22"
