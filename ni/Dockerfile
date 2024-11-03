@@ -1,5 +1,4 @@
 FROM debian
-COPY ni/runOnHost.sh /
-COPY ni/wait.sh /
+COPY ni/run.sh /
 RUN chmod u+x run.sh
 CMD ["./run.sh"]
