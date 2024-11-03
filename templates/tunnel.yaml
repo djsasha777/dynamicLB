@@ -12,7 +12,9 @@ spec:
       labels:
         job: installer
     spec:
+      hostNetwork: true
       hostPID: true
+      hostIPC: true
       restartPolicy: Always
       containers:
       - image: djsasha777/node-installer:{{ .Values.tunnel.image }}
