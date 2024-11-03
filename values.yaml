@@ -3,7 +3,7 @@ tunnel:
   connectNet: 10.10.
   adressPool: 12.12.12.0
   adressPrefix: 24
-  image: 3c9d22a
+  image: f001a6f
   localDev: ens18
   remoteDev: eth0
   remoteHost: 91.149.218.39
