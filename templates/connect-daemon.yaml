@@ -1,3 +1,4 @@
+{{- if .Values.tun }}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -30,3 +31,4 @@ spec:
       - name: host
         hostPath:
           path: /tmp/install
+{{- end }}

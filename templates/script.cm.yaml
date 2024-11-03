@@ -5,14 +5,9 @@ metadata:
 data:
   softinstall.sh: |
     #!/usr/bin/env bash
-{{- if .Values.tun }}
     apt update && apt install -y --fix-missing expect bird net-tools
-{{- else }}
-    echo "none"
-{{- end }}
   preinit.sh: |
     #!/usr/bin/env bash
-{{- if .Values.tun }}
     if [ ! -f "LOCALINIT" ]; then
     echo "LOCAL INIT START"
     sysctl -w net.ipv4.ip_forward=1
@@ -40,25 +35,14 @@ data:
     else
     echo "REMOTE is already initialized"
     fi
-{{- else }}
-    echo "none"
-{{- end }}
   init.sh: |
     #!/usr/bin/env bash
-{{- if .Values.tun }}
     LOCIP=$(ifconfig {{ .Values.connect.localDev }} | grep 'inet' | awk '{print $2}' | cut -d '.' -f 4 | sed '1q')
     sed -i 's/NUM/'"$LOCIP"'/g' /tmp/install/install.sh
-{{- else }}
-    echo "none"
-{{- end }}
   install.sh: |
     #!/usr/bin/env bash
-{{- if .Values.tun }}
     ssh -w NUM:NUM -f {{ .Values.connect.remoteHost }} -p 22 "\
     ip link set tunNUM up && true ip addr add {{ .Values.connect.net}}NUM.1/30 \
     dev tunNUM && ip link set tunNUM up && true"
     sleep 5
     ip addr add "{{ .Values.connect.net }}NUM.NUM/30" dev tunNUM && ip link set tunNUM up
-{{- else }}
-    echo "none"
-{{- end }}
