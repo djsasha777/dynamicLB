@@ -1,0 +1,50 @@
+{{- if .Values.l2.enable }}
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: pool-l2
+spec:
+  blocks:
+    - cidr: {{ .Values.l2.adressPool }}/{{ .Values.l2.adressPrefix }}
+  disabled: false
+  serviceSelector:
+    matchLabels:
+      pool: l2
+
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: l2
+spec:
+  externalIPs: true
+  interfaces:
+    - {{ .Values.l2.localDev }}
+  loadBalancerIPs: true
+  nodeSelector:
+    matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: DoesNotExist
+  serviceSelector:
+    matchLabels:
+      pool: l2
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    pool: l2
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30454
+  selector:
+    app: nginx
+  type: LoadBalancer
+  loadBalancerClass: io.cilium/l2-announcer
+{{- end }}

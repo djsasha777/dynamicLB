@@ -1,21 +1,25 @@
-tun: false
-
-connect:
+tunnel:
+  enable: true
+  connectNet: 10.10.
+  adressPool: 12.12.12.0
+  adressPrefix: 24
+  image: 3c9d22a
   localDev: ens18
+  remoteDev: eth0
   remoteHost: 91.149.218.39
-  remoteSshPass: 1234567890
-  net: 10.10.
 
 bgp:
+  enable: true
   adressPool: 11.11.11.0
   adressPrefix: 24
   localAsn: 66000
   remoteAsn:
     - name: as-1
       asn: 66001
-      ip: 10.10.10.1
-  image: 3c9d22a
+      ip: 191.168.111.1
 
-l2: 
-  pool: 192.168.2.0
-  prefix: 24
+l2:
+  enable: true
+  adressPool: 13.13.13.0
+  adressPrefix: 24
+  localDev: ens18
