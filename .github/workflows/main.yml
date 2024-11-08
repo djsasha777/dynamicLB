@@ -22,10 +22,17 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-      - name: Build and push to Dockerhub
+      - name: Build ni
         uses: docker/build-push-action@v3
         with:
           context: .
           file: ni/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.workflow }}:${{ steps.short-sha.outputs.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tunnel:${{ steps.short-sha.outputs.sha }}
+      - name: Build wa
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: wa/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/watcher:${{ steps.short-sha.outputs.sha }}
