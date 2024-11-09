@@ -26,4 +26,5 @@ l2:
   localDev: ens18
 
 watcher:
-  image: d825ab9
+  enable: true
+  image: 555c9fa

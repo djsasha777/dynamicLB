@@ -1,3 +1,4 @@
+{{- if .Values.watcher.enable }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -39,3 +40,4 @@ spec:
       targetPort: 80
   selector:
     app: watcher
+{{- end }}
