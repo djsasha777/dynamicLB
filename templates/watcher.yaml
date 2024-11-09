@@ -7,7 +7,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: default
-  namespace: tunnel
+  namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: admin
@@ -42,7 +42,7 @@ spec:
             requests:
               cpu: 500m
               memory: 500Mi
-              
+
 ---
 apiVersion: v1
 kind: Service
