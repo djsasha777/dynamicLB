@@ -14,6 +14,7 @@ def update_haproxy_config(svc):
     pass
 
 def main():
+    print(f"Обновляем конфигурацию")
     w = watch.Watch()
     for event in w.stream(v1.list_service_for_all_namespaces, _request_timeout=60):
         if event['type'] == 'ADDED':
