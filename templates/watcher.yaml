@@ -1,5 +1,19 @@
 {{- if .Values.watcher.enable }}
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: watcher
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: tunnel
+roleRef:
+  kind: ClusterRole
+  name: admin
+  apiGroup: rbac.authorization.k8s.io
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -28,6 +42,7 @@ spec:
             requests:
               cpu: 500m
               memory: 500Mi
+              
 ---
 apiVersion: v1
 kind: Service
