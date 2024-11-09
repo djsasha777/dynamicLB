@@ -24,3 +24,6 @@ l2:
   adressPool: 13.13.13.0
   adressPrefix: 24
   localDev: ens18
+
+watcher:
+  image: d825ab9
