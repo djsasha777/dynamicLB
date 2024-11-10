@@ -33,11 +33,11 @@ jobs:
           context: .
           file: ni/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tunnel:0.0.1
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tunnel:${{ steps.meta.outputs.tags }}
       - name: Build wa
         uses: docker/build-push-action@v3
         with:
           context: .
           file: wa/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/watcher:0.0.1
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/watcher:${{ steps.meta.outputs.tags }}
