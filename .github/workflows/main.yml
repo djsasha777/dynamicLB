@@ -22,24 +22,22 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-      - name: Set Docker tag
-        id: tag
-        uses: cytopia/docker-tag-action@v0.4.7
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
         with:
-          latest_git_branch: master
-          latest_docker_tag_name: ${{ matrix.version }}
-          non_latest_docker_tag_prefix: "${{ matrix.version }}-"    
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/tunnel
       - name: Build ni
         uses: docker/build-push-action@v3
         with:
           context: .
           file: ni/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tunnel:${{ steps.tag.outputs.docker-tag }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tunnel:${{ steps.meta.outputs.labels }}
       - name: Build wa
         uses: docker/build-push-action@v3
         with:
           context: .
           file: wa/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/watcher:${{ steps.tag.outputs.docker-tag }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/watcher:${{ steps.meta.outputs.labels }}
