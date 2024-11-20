@@ -25,10 +25,23 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
       - name: Docker meta
-        id: meta
+        id: metatunnel
         uses: docker/metadata-action@v5
         with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/tunnel       
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/tunnel
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
+      - name: Docker meta 2
+        id: metawatcher
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/watcher
           tags: |
             type=schedule
             type=ref,event=branch
@@ -43,11 +56,11 @@ jobs:
           context: .
           file: ni/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tunnel:${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.metatunnel.outputs.tags }}
       - name: Build wa
         uses: docker/build-push-action@v3
         with:
           context: .
           file: wa/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/watcher:${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.metawatcher.outputs.tags }}
