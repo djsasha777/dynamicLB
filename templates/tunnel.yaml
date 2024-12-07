@@ -182,6 +182,7 @@ metadata:
   name: nginxtun
   labels:
     pool: tunnel
+    lbtype: {{ .Values.watcher.lbtype }}
 spec:
   ports:
     - protocol: TCP

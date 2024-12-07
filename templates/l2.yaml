@@ -37,6 +37,7 @@ metadata:
   name: nginx
   labels:
     pool: l2
+    lbtype: {{ .Values.watcher.lbtype }}
 spec:
   ports:
     - protocol: TCP

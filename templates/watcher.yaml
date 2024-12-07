@@ -42,6 +42,11 @@ spec:
             requests:
               cpu: 500m
               memory: 500Mi
+          env:
+          - name: LBTYPE
+            value: {{ .Values.watcher.lbtype }}
+          - name: DOMAIN
+            value: {{ .Values.watcher.domain }}
 
 ---
 apiVersion: v1

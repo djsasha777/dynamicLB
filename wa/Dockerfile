@@ -1,4 +1,6 @@
 FROM python:3.10.0b3-alpine3.14
+ENV LBTYPE \
+    DOMAIN
 WORKDIR /app
 ADD wa/main.py /app
 ADD wa/requirements.txt /app/

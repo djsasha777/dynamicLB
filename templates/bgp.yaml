@@ -73,6 +73,7 @@ metadata:
   name: nginxbgp
   labels:
     pool: bgp
+    lbtype: {{ .Values.watcher.lbtype }}
 spec:
   ports:
     - protocol: TCP

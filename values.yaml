@@ -4,7 +4,7 @@ tunnel:
   adressPool: 12.12.12.0
   adressPoolcr: 12.12.12.
   adressPrefix: 24
-  image: 5b6ade3
+  image: latest
   localDev: ens18
   remoteDev: eth0
   remoteHost: 91.149.218.39
@@ -27,4 +27,6 @@ l2:
 
 watcher:
   enable: true
-  image: 555c9fa
+  image: latest
+  lbtype: tunnel
+  domain: spongo.ru
