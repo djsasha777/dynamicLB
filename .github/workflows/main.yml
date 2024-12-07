@@ -11,13 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: get build number
-        uses: benjlevesque/short-sha@v1.2
-        id: short-sha
-        with:
-         length: 7
-      - name: Get git commit data
-        uses: rlespinasse/git-commit-data-action@v1    
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
